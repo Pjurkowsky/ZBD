@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5433:5432'
+    volumes:
+    - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test
+#  spring:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - db
+volumes:
+  database:
