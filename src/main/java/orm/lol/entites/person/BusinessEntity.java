@@ -30,6 +30,7 @@ public class BusinessEntity {
     @Generated(GenerationTime.INSERT)
     @Column(name = "rowguid", updatable = false, nullable = false)
     private UUID rowguid;
+
     @Column(name = "modifieddate", nullable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
     private LocalDateTime modifiedDate;
 

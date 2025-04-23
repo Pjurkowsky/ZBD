@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "personphone", schema = "Person") // PK (beid, phone, typeid) jest unikalny
+@Table(name = "personphone") // PK (beid, phone, typeid) jest unikalny
 public class PersonPhone {
 
     @EmbeddedId

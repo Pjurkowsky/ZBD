@@ -1,20 +1,24 @@
 services:
-  db:
+  spring_db:
     image: postgres:latest
     restart: always
     ports:
       - '5433:5432'
     volumes:
     - database:/var/lib/postgresql/data
+    - ./baza/dane:/var/lib/postgresql/imports
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: test
-#  spring:
-#    build: .
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
+
+  stand_alone_db:
+    build: ./baza
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5434:5432'
+
 volumes:
   database:

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -49,8 +50,8 @@ public class Address {
     @Column(name = "postalcode", nullable = false, length = 15)
     private String postalCode;
 
-    @Lob // Dla typu bytea
-    @Column(name = "spatiallocation")
+    @Lob
+    @Column(name = "spatiallocation", columnDefinition = "BYTEA")
     private byte[] spatialLocation; // Można użyć typów PostGIS z hibernate-spatial
 
     @Generated(GenerationTime.INSERT)
