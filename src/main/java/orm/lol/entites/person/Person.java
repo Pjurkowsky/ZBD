@@ -1,28 +1,37 @@
 package orm.lol.entites.person;
 
-
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import org.hibernate.annotations.*;
-
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "person", uniqueConstraints = {
-        @UniqueConstraint(name = "uq_person_rowguid", columnNames = {"rowguid"})
-})
-@Check(constraints =
-        "(emailpromotion BETWEEN 0 AND 2) " +
-                "AND (persontype IS NULL OR UPPER(persontype) IN ('SC', 'VC', 'IN', 'EM', 'SP', 'GC'))"
+@Table(
+    name = "person",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uq_person_rowguid",
+            columnNames = { "rowguid" }
+        ),
+    }
+)
+@Check(
+    constraints = "(emailpromotion BETWEEN 0 AND 2) " +
+    "AND (persontype IS NULL OR UPPER(persontype) IN ('SC', 'VC', 'IN', 'EM', 'SP', 'GC'))"
 )
 public class Person {
 
@@ -34,7 +43,11 @@ public class Person {
     @Column(name = "persontype", nullable = false, length = 2)
     private String personType;
 
-    @Column(name = "namestyle", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(
+        name = "namestyle",
+        nullable = false,
+        columnDefinition = "BOOLEAN DEFAULT false"
+    )
     private boolean nameStyle; // "NameStyle" -> boolean
 
     @Column(name = "title", length = 8)
@@ -52,7 +65,11 @@ public class Person {
     @Column(name = "suffix", length = 10)
     private String suffix;
 
-    @Column(name = "emailpromotion", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
+    @Column(
+        name = "emailpromotion",
+        nullable = false,
+        columnDefinition = "INTEGER DEFAULT 0"
+    )
     private Integer emailPromotion;
 
     @Column(name = "additionalcontactinfo", columnDefinition = "XML")
@@ -65,12 +82,42 @@ public class Person {
     @Column(name = "rowguid", updatable = false, nullable = false)
     private UUID rowguid;
 
-    @Column(name = "modifieddate", nullable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
+    @Column(
+        name = "modifieddate",
+        nullable = false,
+        columnDefinition = "TIMESTAMP DEFAULT NOW()"
+    )
     private LocalDateTime modifiedDate;
 
-     @OneToOne(fetch = FetchType.LAZY)
-     @MapsId
-     @JoinColumn(name = "businessentityid")
-     private BusinessEntity businessEntity;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "businessentityid")
+    private BusinessEntity businessEntity;
 
+    @Override
+    public String toString() {
+        return firstName + middleName;
+    }
+
+    public JSONObject toJSON() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("businessentityid", this.businessEntityId);
+        map.put("persontype", this.personType);
+        map.put("namestyle", this.nameStyle);
+        map.put("title", this.title);
+        map.put("firstname", this.firstName);
+        map.put("middlename", this.middleName);
+        map.put("lastname", this.lastName);
+        map.put("suffix", this.suffix);
+        map.put("emailpromotion", this.emailPromotion);
+        // XML
+        // map.put("additionalcontactinfo", this.additionalContactInfo);
+        // map.put("demographics", this.demographics);
+        map.put("rowguid", this.rowguid);
+        map.put("modifieddate", this.modifiedDate);
+
+        JSONObject object = new JSONObject(map);
+
+        return object;
+    }
 }
