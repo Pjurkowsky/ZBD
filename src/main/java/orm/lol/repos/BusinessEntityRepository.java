@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.data.repository.Repository;
 import orm.lol.entites.person.BusinessEntity;
 
-// @org.springframework.stereotype.Repository
 public interface BusinessEntityRepository
     extends Repository<BusinessEntity, Integer> {
     List<BusinessEntity> findAll();
