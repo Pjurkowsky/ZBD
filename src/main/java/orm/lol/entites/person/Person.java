@@ -1,5 +1,6 @@
 package orm.lol.entites.person;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -101,7 +102,7 @@ public class Person {
 
     public JSONObject toJSON() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("businessentityid", this.businessEntityId);
+        map.put("businessentity", this.businessEntity.toJSON());
         map.put("persontype", this.personType);
         map.put("namestyle", this.nameStyle);
         map.put("title", this.title);
@@ -119,5 +120,9 @@ public class Person {
         JSONObject object = new JSONObject(map);
 
         return object;
+    }
+
+    public Integer getBusinessEntityId() {
+        return this.businessEntityId;
     }
 }

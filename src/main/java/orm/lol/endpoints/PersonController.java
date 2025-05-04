@@ -1,4 +1,4 @@
-package orm.lol;
+package orm.lol.endpoints;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,25 +13,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import orm.lol.entites.person.Person;
 import orm.lol.repos.PersonRepository;
 
 @RestController
-@Tag(name = "Sporting events")
-public class WebController {
+@RequestMapping("/person")
+@Tag(name = "Person")
+public class PersonController {
 
     @Autowired
     PersonRepository personRepo;
 
-    @GetMapping("/")
-    @Operation(summary = "Gets all sporting events")
-    public String index() {
-        return "Greetings from Spring Boot!";
-    }
-
     @RequestMapping(
-        value = "/person/all",
+        value = "/all",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -46,12 +42,15 @@ public class WebController {
     }
 
     @RequestMapping(
-        value = "/person/{guid}",
+        value = "/{guid}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Get person by GUID")
-    public String getAllPersons(@PathVariable UUID guid) {
+    public String getPersonByGUID(
+        @PathVariable UUID guid,
+        @RequestParam Boolean full
+    ) {
         Optional<Person> person = personRepo.findByRowguid(guid);
 
         if (person.isEmpty()) {
