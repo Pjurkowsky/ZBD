@@ -8,7 +8,9 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,46 +33,44 @@ public class StateProvinceController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Gets all state provinces")
-    public String getAllProvinces() {
-        List<StateProvince> provinceList = stateProvinceRepository.findAll();
-        JSONArray jsonArray = new JSONArray(
-            provinceList.stream().map(province -> province.toJSON()).toList()
-        );
-
-        return jsonArray.toString();
+    public ResponseEntity<List<StateProvince>> getAllProvinces(@RequestParam Integer times) {
+        for(int i =0; i < times - 1;  i++) {
+            ResponseEntity.ok(stateProvinceRepository.findAll());
+        }
+        return  ResponseEntity.ok(stateProvinceRepository.findAll());
     }
 
     @RequestMapping(
-        value = "/{guid}",
+        value = "/guid/{guid}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Get state province by GUID")
-    public String getProvinceByGUID(@PathVariable UUID guid) {
+    public ResponseEntity<StateProvince> getProvinceByGUID(@PathVariable UUID guid) {
         Optional<StateProvince> province =
             stateProvinceRepository.findByRowguid(guid);
 
         if (province.isEmpty()) {
-            return JSONObject.NULL.toString();
+            return ResponseEntity.notFound().build();
         }
 
-        return province.get().toJSON().toString();
+        return ResponseEntity.status(HttpStatus.OK).body(province.get());
     }
 
     @RequestMapping(
-        value = "/{id}",
+        value = "/id/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     @Operation(summary = "Get state province by ID")
-    public String getProvinceByID(@PathVariable Integer id) {
+    public ResponseEntity<StateProvince> getProvinceByID(@PathVariable Integer id) {
         Optional<StateProvince> province =
             stateProvinceRepository.findByStateProvinceId(id);
 
         if (province.isEmpty()) {
-            return JSONObject.NULL.toString();
+            return ResponseEntity.notFound().build();
         }
 
-        return province.get().toJSON().toString();
+        return ResponseEntity.status(HttpStatus.OK).body(province.get());
     }
 }

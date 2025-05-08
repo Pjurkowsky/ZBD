@@ -8,13 +8,15 @@ import java.util.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import orm.lol.dtos.PersonDto;
 import orm.lol.entites.person.Person;
 import orm.lol.repos.PersonRepository;
 
@@ -59,4 +61,29 @@ public class PersonController {
 
         return person.get().toJSON().toString();
     }
+
+    @RequestMapping(
+            value = "/",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Get people by Business Entity Address")
+    public ResponseEntity<PersonDto> getPersonsByBusinessEntityAddresses(
+            @RequestParam Integer id,
+            @RequestParam Integer times
+    ) {
+
+        for(int i =0; i < times - 1;  i++) {
+            personRepo.findByBusinessEntity_BusinessEntityId(id);
+        }
+
+        Person person = personRepo.findByBusinessEntity_BusinessEntityId(id).orElseThrow(
+
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(PersonDto.toDto(person));
+
+    }
+
+
 }

@@ -2,9 +2,8 @@ package orm.lol.entites.person;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +44,8 @@ public class BusinessEntity {
         columnDefinition = "TIMESTAMP DEFAULT NOW()"
     )
     private LocalDateTime modifiedDate;
+
+
 
     public JSONObject toJSON() {
         Map<String, Object> map = new HashMap<String, Object>();
