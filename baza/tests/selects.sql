@@ -1,30 +1,20 @@
 DO $$
 DECLARE
-i INTEGER := 1;
+i INT := 0;
     start_time TIMESTAMP;
     end_time TIMESTAMP;
-    elapsed INTERVAL;
+    duration_us DOUBLE PRECISION;
 BEGIN
-    WHILE i <= 100 LOOP
+FOR i IN 1..100 LOOP
         start_time := clock_timestamp();
+PERFORM *
+FROM Person.AddressType;
 
-        -- Replace the query below with yours
-        PERFORM
-p.businessentityid,
-            p.firstname,
-            p.lastname,
-            b.rowguid,
-            b.modifieddate
-        FROM person p
-        JOIN businessentity b ON p.businessentityid = b.businessentityid
-        WHERE b.businessentityid = 1;
 
         end_time := clock_timestamp();
-        elapsed := end_time - start_time;
+        duration_us := EXTRACT(EPOCH FROM (end_time - start_time)) * 1000000;
 
-        RAISE NOTICE 'Execution % took: %', i, elapsed;
-
-        i := i + 1;
+        RAISE NOTICE '%',  duration_us;
 END LOOP;
-END;
-$$ LANGUAGE plpgsql;
+
+END $$;
