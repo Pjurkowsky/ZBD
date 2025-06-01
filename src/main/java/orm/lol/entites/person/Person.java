@@ -3,6 +3,7 @@ package orm.lol.entites.person;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
+import jakarta.persistence.criteria.Join;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import lombok.Setter;
 import org.hibernate.annotations.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.jpa.domain.Specification;
 
 @Getter
 @Setter
@@ -94,6 +96,18 @@ public class Person {
     @MapsId
     @JoinColumn(name = "businessentityid")
     private BusinessEntity businessEntity;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "businessentityid")
+    private Set<EmailAddress> emailAddresses;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "businessentityid")
+    private Set<Password> passwords;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "businessentityid")
+    private Set<PersonPhone> personPhones;
 
     @Override
     public String toString() {

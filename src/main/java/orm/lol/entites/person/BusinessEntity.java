@@ -3,14 +3,12 @@ package orm.lol.entites.person;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.GenericGenerator;
 import org.json.JSONObject;
 
 @Getter
@@ -45,7 +43,9 @@ public class BusinessEntity {
     )
     private LocalDateTime modifiedDate;
 
-
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "businessentityid")
+    private Set<BusinessEntityAddress> businessEntityAddresses;
 
     public JSONObject toJSON() {
         Map<String, Object> map = new HashMap<String, Object>();

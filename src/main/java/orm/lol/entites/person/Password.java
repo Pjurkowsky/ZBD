@@ -1,25 +1,30 @@
 package orm.lol.entites.person;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "password", uniqueConstraints = {
-        @UniqueConstraint(name = "uq_password_rowguid", columnNames = {"rowguid"})
-})
+@Table(
+    name = "password",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uq_password_rowguid",
+            columnNames = { "rowguid" }
+        ),
+    }
+)
 public class Password {
 
     // Klucz główny jest współdzielony z BusinessEntity/Person (relacja 1-do-1)
@@ -36,11 +41,25 @@ public class Password {
     @Generated(GenerationTime.INSERT)
     @Column(name = "rowguid", updatable = false, nullable = false)
     private UUID rowguid;
-    @Column(name = "modifieddate", nullable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
+
+    @Column(
+        name = "modifieddate",
+        nullable = false,
+        columnDefinition = "TIMESTAMP DEFAULT NOW()"
+    )
     private LocalDateTime modifiedDate;
 
-     @OneToOne(fetch = FetchType.LAZY)
-     @MapsId
-     @JoinColumn(name = "businessentityid")
-     private BusinessEntity businessEntity;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "businessentityid")
+    private BusinessEntity businessEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "businessentityid",
+        referencedColumnName = "businessentityid",
+        insertable = false,
+        updatable = false
+    )
+    private Person person;
 }

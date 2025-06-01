@@ -51,8 +51,11 @@ public class StateProvince {
     @Column(name = "stateprovincecode", nullable = false, length = 3)
     private String stateProvinceCode;
 
-    @Column(name = "countryregioncode", nullable = false, length = 3)
-    private String countryRegionCode; // Klucz obcy do CountryRegion
+    // @Column(name = "countryregioncode", nullable = false, length = 3)
+    // private String countryRegionCode; // Klucz obcy do CountryRegion
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "countryregioncode", nullable = false)
+    private CountryRegion countryRegion;
 
     @Column(
         name = "isonlystateprovinceflag",

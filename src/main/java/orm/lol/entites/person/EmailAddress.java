@@ -1,32 +1,37 @@
 package orm.lol.entites.person;
 
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "emailaddress",
-        uniqueConstraints = {
-                // Adres email powinien być unikalny dla danego BusinessEntityID
-                @UniqueConstraint(name = "uq_emailaddress_beid_email", columnNames = {"businessentityid", "emailaddress"}),
-                @UniqueConstraint(name = "uq_emailaddress_rowguid", columnNames = {"rowguid"})
-        },
-        indexes = {
-                @Index(name = "idx_emailaddress_email", columnList = "emailaddress") // Indeks dla wyszukiwania po emailu
-        }
+@Table(
+    name = "emailaddress",
+    uniqueConstraints = {
+        // Adres email powinien być unikalny dla danego BusinessEntityID
+        @UniqueConstraint(
+            name = "uq_emailaddress_beid_email",
+            columnNames = { "businessentityid", "emailaddress" }
+        ),
+        @UniqueConstraint(
+            name = "uq_emailaddress_rowguid",
+            columnNames = { "rowguid" }
+        ),
+    },
+    indexes = {
+        @Index(name = "idx_emailaddress_email", columnList = "emailaddress"), // Indeks dla wyszukiwania po emailu
+    }
 )
 public class EmailAddress {
 
@@ -44,10 +49,29 @@ public class EmailAddress {
     @Generated(GenerationTime.INSERT)
     @Column(name = "rowguid", updatable = false, nullable = false)
     private UUID rowguid;
-    @Column(name = "modifieddate", nullable = false, columnDefinition = "TIMESTAMP DEFAULT NOW()")
+
+    @Column(
+        name = "modifieddate",
+        nullable = false,
+        columnDefinition = "TIMESTAMP DEFAULT NOW()"
+    )
     private LocalDateTime modifiedDate;
 
-     @ManyToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "businessentityid", referencedColumnName = "businessentityid", insertable=false, updatable=false)
-     private BusinessEntity businessEntity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "businessentityid",
+        referencedColumnName = "businessentityid",
+        insertable = false,
+        updatable = false
+    )
+    private BusinessEntity businessEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "businessentityid",
+        referencedColumnName = "businessentityid",
+        insertable = false,
+        updatable = false
+    )
+    private Person person;
 }
