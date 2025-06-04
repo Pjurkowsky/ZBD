@@ -72,16 +72,47 @@ public class PersonController {
             @RequestParam Integer id,
             @RequestParam Integer times
     ) {
-
         for(int i =0; i < times - 1;  i++) {
             personRepo.findByBusinessEntity_BusinessEntityId(id);
         }
-
         Person person = personRepo.findByBusinessEntity_BusinessEntityId(id).orElseThrow(
 
         );
-
         return ResponseEntity.status(HttpStatus.OK).body(PersonDto.toDto(person));
+
+    }
+
+    @RequestMapping(
+            value = "/type/",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<Person>> getPersonByType(
+            @RequestParam String type,
+            @RequestParam Integer times
+    ) {
+        for(int i =0; i < times;  i++) {
+            personRepo.findByPersonType(type);
+        }
+        List<Person> persons = List.of();
+        return ResponseEntity.status(HttpStatus.OK).body(persons);
+
+    }
+
+    @RequestMapping(
+            value = "/type-native/",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<Person>> getPersonByTypeNative(
+            @RequestParam String type,
+            @RequestParam Integer times
+    ) {
+        for(int i =0; i < times;  i++) {
+            personRepo.findByPersonTypeNative(type);
+        }
+        List<Person> persons = List.of();
+        return ResponseEntity.status(HttpStatus.OK).body(persons);
 
     }
 
