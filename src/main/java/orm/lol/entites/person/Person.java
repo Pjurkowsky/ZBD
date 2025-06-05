@@ -102,7 +102,7 @@ public class Person {
 
     public JSONObject toJSON() {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("businessentity", this.businessEntity.toJSON());
+//        map.put("businessentity", this.businessEntity.toJSON());
         map.put("persontype", this.personType);
         map.put("namestyle", this.nameStyle);
         map.put("title", this.title);
@@ -121,6 +121,24 @@ public class Person {
 
         return object;
     }
+    public JSONObject jdbcToJson() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("businessEntityId", this.businessEntityId);
+        map.put("personType", this.personType);
+        map.put("nameStyle", this.nameStyle);
+        map.put("title", this.title);
+        map.put("firstName", this.firstName);
+        map.put("middleName", this.middleName);
+        map.put("lastName", this.lastName);
+        map.put("suffix", this.suffix);
+        map.put("emailPromotion", this.emailPromotion);
+        map.put("rowguid", this.rowguid);
+        map.put("modifiedDate", this.modifiedDate);
+        map.put("businessEntity", JSONObject.NULL);
+
+        return new JSONObject(map);
+    }
+
 
     public Integer getBusinessEntityId() {
         return this.businessEntityId;

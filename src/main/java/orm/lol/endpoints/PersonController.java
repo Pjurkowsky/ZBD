@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import orm.lol.dtos.PersonDto;
 import orm.lol.entites.person.Person;
 import orm.lol.repos.PersonRepository;
 
@@ -37,7 +36,7 @@ public class PersonController {
     public String getAllPersons() {
         List<Person> personList = personRepo.findAll();
         JSONArray jsonArray = new JSONArray(
-            personList.stream().map(person -> person.toJSON()).toList()
+            personList.stream().map(Person::toJSON).toList()
         );
 
         return jsonArray.toString();
@@ -62,25 +61,25 @@ public class PersonController {
         return person.get().toJSON().toString();
     }
 
-    @RequestMapping(
-            value = "/",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    @Operation(summary = "Get people by Business Entity Address")
-    public ResponseEntity<PersonDto> getPersonsByBusinessEntityAddresses(
-            @RequestParam Integer id,
-            @RequestParam Integer times
-    ) {
-        for(int i =0; i < times - 1;  i++) {
-            personRepo.findByBusinessEntity_BusinessEntityId(id);
-        }
-        Person person = personRepo.findByBusinessEntity_BusinessEntityId(id).orElseThrow(
-
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(PersonDto.toDto(person));
-
-    }
+//    @RequestMapping(
+//            value = "/",
+//            method = RequestMethod.GET,
+//            produces = MediaType.APPLICATION_JSON_VALUE
+//    )
+//    @Operation(summary = "Get people by Business Entity Address")
+//    public ResponseEntity<PersonDto> getPersonsByBusinessEntityAddresses(
+//            @RequestParam Integer id,
+//            @RequestParam Integer times
+//    ) {
+//        for(int i =0; i < times - 1;  i++) {
+//            personRepo.findByBusinessEntity_BusinessEntityId(id);
+//        }
+//        Person person = personRepo.findByBusinessEntity_BusinessEntityId(id).orElseThrow(
+//
+//        );
+//        return ResponseEntity.status(HttpStatus.OK).body(PersonDto.toDto(person));
+//
+//    }
 
     @RequestMapping(
             value = "/type/",
@@ -111,10 +110,7 @@ public class PersonController {
         for(int i =0; i < times;  i++) {
             personRepo.findByPersonTypeNative(type);
         }
-        List<Person> persons = List.of();
-        return ResponseEntity.status(HttpStatus.OK).body(persons);
-
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(personRepo.findByPersonType(type));
     }
-
-
 }

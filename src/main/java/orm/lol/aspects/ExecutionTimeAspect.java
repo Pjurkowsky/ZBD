@@ -18,9 +18,9 @@ import java.nio.file.StandardOpenOption;
 public class ExecutionTimeAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(ExecutionTimeAspect.class);
-    private static final String LOG_DIR = "repository-logs";
+    private static final String LOG_DIR = "execution-time-logs";
 
-    @Around("execution(* orm.lol.repos.*Repository.*(..))")
+    @Around("execution(* orm.lol.repos.*Repository.*(..)) || execution(* orm.lol.jdbc.services.*.*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.nanoTime();
 
@@ -38,6 +38,7 @@ public class ExecutionTimeAspect {
 
         return proceed;
     }
+
     private void appendLogToFile(String filename, String content) {
         try {
             Path logDirPath = Paths.get(LOG_DIR);
@@ -48,7 +49,7 @@ public class ExecutionTimeAspect {
             Path filePath = logDirPath.resolve(filename);
             Files.write(filePath, content.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
-            logger.error("Failed to write log entry", e);
+            logger.error("Failed to write log entry to file: {}", filename, e);
         }
     }
 
