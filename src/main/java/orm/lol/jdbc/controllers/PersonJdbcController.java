@@ -59,4 +59,35 @@ public class PersonJdbcController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(personService.findByPersonType(type));
     }
+
+
+    @RequestMapping(
+            value = "/email",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<Person>> getPersonEmails(
+            @RequestParam Integer times
+    ) {
+        for(int i =0; i < times;  i++) {
+            personService.findPersonEmail();
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(personService.findPersonEmail());
+    }
+
+    @RequestMapping(
+            value = "/multipleJoin",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<Person>> getMultipleJoinPersons(
+            @RequestParam Integer times
+    ) {
+        for(int i =0; i < times;  i++) {
+            personService.multipleJoin();
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(personService.multipleJoin());
+    }
 }
